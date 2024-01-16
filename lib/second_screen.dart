@@ -33,13 +33,14 @@ class _ScoreBoardState extends State<ScoreBoard> {
     });
   }
 
-  void doubleScores() {
+  void doubleScores(List<int> scores) {
     setState(() {
-      for (int i = 0; i < playerScores.length; i++) {
-        for (int j = 0; j < widget.numberOfPlayers; j++) {
-          playerScores[i][j] *= 2;
-        }
-      }
+      playerScores.add(scores.map((score) => score * 2).toList());
+      // for (int i = 0; i < playerScores.length; i++) {
+      //   for (int j = 0; j < widget.numberOfPlayers; j++) {
+      //     playerScores[i][j] *= 2;
+      //   }
+      // }
     });
   }
 
@@ -77,6 +78,128 @@ class _ScoreBoardState extends State<ScoreBoard> {
   //   });
   // }
 
+//------------- Basic Func
+  // Widget buildDataTable() {
+  //   return DataTable(
+  //     headingTextStyle: const TextStyle(
+  //       fontWeight: FontWeight.bold,
+  //       color: Colors.white,
+  //       fontSize: 16,
+  //     ),
+  //     dataTextStyle: const TextStyle(
+  //       color: Colors.white,
+  //       fontSize: 16,
+  //     ),
+  //     headingRowColor: MaterialStateColor.resolveWith((states) =>
+  //         AppColor.kBackgroundTableHead), // Red color for heading row
+  //     border: TableBorder.all(
+  //         color: Colors.white), // White border color for the entire DataTable
+  //     columns: [
+  //       for (int i = 0; i < widget.numberOfPlayers; i++)
+  //         DataColumn(label: Text(widget.playerNames[i])),
+  //     ],
+  //     rows: playerScores.isNotEmpty
+  //         ? List.generate(
+  //             playerScores.length + 1, // +1 for the total row
+  //             (index) {
+  //               if (index == playerScores.length) {
+  //                 return DataRow(
+  //                   cells: [
+  //                     for (int i = 0; i < widget.numberOfPlayers; i++)
+  //                       DataCell(
+  //                         Text(
+  //                           '${playerScores.fold(0, (sum, list) => sum + (list[i]))}',
+  //                         ),
+  //                       ),
+  //                   ],
+  //                 );
+  //               } else {
+  //                 List<DataCell> cells = [];
+  //                 for (int i = 0; i < widget.numberOfPlayers; i++) {
+  //                   cells.add(DataCell(Text('${playerScores[index][i]}')));
+  //                 }
+  //                 return DataRow(cells: cells);
+  //               }
+  //             },
+  //           )
+  //         : [
+  //             DataRow(
+  //               cells: List.generate(
+  //                 widget.numberOfPlayers,
+  //                 (index) => DataCell(
+  //                   Text(''),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //   );
+  // }
+
+//-----------------Green Color
+  // Widget buildDataTable() {
+  //   return DataTable(
+  //     headingTextStyle: const TextStyle(
+  //       fontWeight: FontWeight.bold,
+  //       color: Colors.white,
+  //       fontSize: 16,
+  //     ),
+  //     dataTextStyle: const TextStyle(
+  //       color: Colors.white,
+  //       fontSize: 16,
+  //     ),
+  //     headingRowColor: MaterialStateColor.resolveWith(
+  //         (states) => AppColor.kBackgroundTableHead),
+  //     border: TableBorder.all(color: Colors.white),
+  //     columns: [
+  //       for (int i = 0; i < widget.numberOfPlayers; i++)
+  //         DataColumn(label: Text(widget.playerNames[i])),
+  //     ],
+  //     rows: playerScores.isNotEmpty
+  //         ? List.generate(
+  //             playerScores.length + 1,
+  //             (index) {
+  //               if (index == playerScores.length) {
+  //                 return DataRow(
+  //                   cells: [
+  //                     for (int i = 0; i < widget.numberOfPlayers; i++)
+  //                       DataCell(
+  //                         Text(
+  //                           '${playerScores.fold(0, (sum, list) => sum + (list[i]))}',
+  //                         ),
+  //                       ),
+  //                   ],
+  //                 );
+  //               } else {
+  //                 int minScore =
+  //                     playerScores[index].reduce((a, b) => a < b ? a : b);
+  //                 List<DataCell> cells = [];
+  //                 for (int i = 0; i < widget.numberOfPlayers; i++) {
+  //                   int score = playerScores[index][i];
+  //                   cells.add(DataCell(
+  //                     Container(
+  //                       // Set green background color for the smallest score
+  //                       color: score == minScore ? Colors.green : null,
+  //                       child: Text('$score'),
+  //                     ),
+  //                   ));
+  //                 }
+  //                 return DataRow(cells: cells);
+  //               }
+  //             },
+  //           )
+  //         : [
+  //             DataRow(
+  //               cells: List.generate(
+  //                 widget.numberOfPlayers,
+  //                 (index) => const DataCell(
+  //                   Text(''),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //   );
+  // }
+
   Widget buildDataTable() {
     return DataTable(
       headingTextStyle: const TextStyle(
@@ -88,33 +211,47 @@ class _ScoreBoardState extends State<ScoreBoard> {
         color: Colors.white,
         fontSize: 16,
       ),
-      headingRowColor: MaterialStateColor.resolveWith((states) =>
-          AppColor.kBackgroundTableHead), // Red color for heading row
-      border: TableBorder.all(
-          color: Colors.white), // White border color for the entire DataTable
+      headingRowColor: MaterialStateColor.resolveWith(
+          (states) => AppColor.kBackgroundTableHead),
+      border: TableBorder.all(color: Colors.white),
       columns: [
         for (int i = 0; i < widget.numberOfPlayers; i++)
-          DataColumn(label: Text(widget.playerNames[i])),
+          DataColumn(
+            label: Align(
+              alignment: Alignment.center,
+              child: Text(widget.playerNames[i]),
+            ),
+          ),
       ],
       rows: playerScores.isNotEmpty
           ? List.generate(
               playerScores.length + 1, // +1 for the total row
               (index) {
                 if (index == playerScores.length) {
+                  // Last row for total
                   return DataRow(
                     cells: [
                       for (int i = 0; i < widget.numberOfPlayers; i++)
                         DataCell(
-                          Text(
-                            '${playerScores.fold(0, (sum, list) => sum + (list[i]))}',
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Total: ${playerScores.fold(0, (sum, list) => sum + (list[i]))}',
+                            ),
                           ),
                         ),
                     ],
                   );
                 } else {
+                  // Regular data rows
                   List<DataCell> cells = [];
                   for (int i = 0; i < widget.numberOfPlayers; i++) {
-                    cells.add(DataCell(Text('${playerScores[index][i]}')));
+                    cells.add(DataCell(
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text('${playerScores[index][i]}'),
+                      ),
+                    ));
                   }
                   return DataRow(cells: cells);
                 }
@@ -125,7 +262,10 @@ class _ScoreBoardState extends State<ScoreBoard> {
                 cells: List.generate(
                   widget.numberOfPlayers,
                   (index) => DataCell(
-                    Text(''),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(''),
+                    ),
                   ),
                 ),
               ),

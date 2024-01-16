@@ -6,7 +6,7 @@ class AddToModalBottomSheet extends StatefulWidget {
   final List<String> playerNames;
   final Function(List<int>) addScoreCallback;
   final VoidCallback removeLastRoundCallback;
-  final VoidCallback doubleScoresCallback;
+  final Function(List<int>) doubleScoresCallback;
 
   const AddToModalBottomSheet({
     Key? key,
@@ -105,7 +105,10 @@ class _AddToModalBottomSheetState extends State<AddToModalBottomSheet> {
               backgroundColor: MaterialStateProperty.all(AppColor.kAppBarColor),
             ),
             onPressed: () {
-              widget.doubleScoresCallback();
+              List<int> scores = controllers
+                  .map((controller) => int.tryParse(controller.text) ?? 0)
+                  .toList();
+              widget.doubleScoresCallback(scores);
               Navigator.pop(context);
             },
             child: const Text(

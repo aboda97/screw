@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Form(
           key: formKey,
           child: ListView(
@@ -170,9 +170,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              const SizedBox(
-                  height:
-                      16), // Add space between TextFormField section and the button
+              // const SizedBox(
+              //     height:
+              //         16), // Add space between TextFormField section and the button
               Builder(
                 builder: (BuildContext context) {
                   return ElevatedButton(
