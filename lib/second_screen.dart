@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:screw_app/add_score_to_bottom_sheet.dart';
 import 'package:screw_app/app_constants.dart';
+import 'package:screw_app/dash_board_screen.dart';
 
 class ScoreBoard extends StatefulWidget {
   final int numberOfPlayers;
@@ -19,6 +20,68 @@ class ScoreBoard extends StatefulWidget {
 class _ScoreBoardState extends State<ScoreBoard> {
   List<List<int>> playerScores = [];
 
+//--------Save Data
+  Future<void> showSaveConfirmationDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColor.kAppBarColor,
+          title: const Center(
+            child: Text(
+              'تأكيد الحفظ',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
+              ),
+            ),
+          ),
+          content: const Text('هل أنت متأكد من حفظ البيانات؟'),
+          actions: <Widget>[
+            ButtonBar(
+              alignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: AppColor.kBackgroundTableHead,
+                      borderRadius: BorderRadius.circular(
+                        12,
+                      )),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    child: const Text('لا'),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: AppColor.kLoserPlayerColor,
+                      borderRadius: BorderRadius.circular(
+                        12,
+                      )),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DashBoardScreen(
+                            playerScores: playerScores,
+                            playerNames: widget.playerNames,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text('نعم'),
+                  ),
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
+
   void addScore(List<int> scores) {
     setState(() {
       playerScores.add(scores);
@@ -36,11 +99,6 @@ class _ScoreBoardState extends State<ScoreBoard> {
   void doubleScores(List<int> scores) {
     setState(() {
       playerScores.add(scores.map((score) => score * 2).toList());
-      // for (int i = 0; i < playerScores.length; i++) {
-      //   for (int j = 0; j < widget.numberOfPlayers; j++) {
-      //     playerScores[i][j] *= 2;
-      //   }
-      // }
     });
   }
 
@@ -261,7 +319,7 @@ class _ScoreBoardState extends State<ScoreBoard> {
               DataRow(
                 cells: List.generate(
                   widget.numberOfPlayers,
-                  (index) => DataCell(
+                  (index) => const DataCell(
                     Align(
                       alignment: Alignment.center,
                       child: Text(''),
@@ -284,6 +342,16 @@ class _ScoreBoardState extends State<ScoreBoard> {
           ),
         ),
         actions: [
+          IconButton(
+            onPressed: () {
+              showSaveConfirmationDialog();
+            },
+            icon: const Icon(
+              Icons.save_alt_outlined,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
           IconButton(
             onPressed: handleAddScore,
             icon: const Icon(
