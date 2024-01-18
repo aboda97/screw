@@ -3,8 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:screw_app/app_constants.dart';
 import 'package:screw_app/first_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:screw_app/models/player.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(PlayerAdapter());
+  scoresBox = await Hive.openBox<Player>('scoresBox');
   runApp(const MyApp());
 }
 

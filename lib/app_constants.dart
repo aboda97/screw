@@ -9,3 +9,5 @@ class AppColor {
   static const kBackgroundTableHead = Color(0xFF65011b);
   static const kLoserPlayerColor = Colors.green;
 }
+
+late final scoresBox;
