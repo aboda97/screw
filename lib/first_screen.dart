@@ -170,9 +170,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              // const SizedBox(
-              //     height:
-              //         16), // Add space between TextFormField section and the button
               Builder(
                 builder: (BuildContext context) {
                   return ElevatedButton(
@@ -183,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       bool validate = formKey.currentState!.validate();
                       if (validate) {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ScoreBoard(

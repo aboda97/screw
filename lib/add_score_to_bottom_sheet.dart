@@ -7,6 +7,8 @@ class AddToModalBottomSheet extends StatefulWidget {
   final Function(List<int>) addScoreCallback;
   final VoidCallback removeLastRoundCallback;
   final Function(List<int>) doubleScoresCallback;
+  final List<List<int>> playerScores;
+  final Function(List<List<int>>, List<String>) saveDataToHiveCallback;
 
   const AddToModalBottomSheet({
     Key? key,
@@ -15,6 +17,8 @@ class AddToModalBottomSheet extends StatefulWidget {
     required this.addScoreCallback,
     required this.removeLastRoundCallback,
     required this.doubleScoresCallback,
+    required this.playerScores,
+    required this.saveDataToHiveCallback,
   }) : super(key: key);
 
   @override
@@ -89,6 +93,8 @@ class _AddToModalBottomSheetState extends State<AddToModalBottomSheet> {
                   .map((controller) => int.tryParse(controller.text) ?? 0)
                   .toList();
               widget.addScoreCallback(scores);
+              widget.saveDataToHiveCallback(
+                  widget.playerScores, widget.playerNames);
               Navigator.pop(context);
             },
             child: const Text(
@@ -109,6 +115,8 @@ class _AddToModalBottomSheetState extends State<AddToModalBottomSheet> {
                   .map((controller) => int.tryParse(controller.text) ?? 0)
                   .toList();
               widget.doubleScoresCallback(scores);
+              widget.saveDataToHiveCallback(
+                  widget.playerScores, widget.playerNames);
               Navigator.pop(context);
             },
             child: const Text(
@@ -126,6 +134,8 @@ class _AddToModalBottomSheetState extends State<AddToModalBottomSheet> {
             ),
             onPressed: () {
               widget.removeLastRoundCallback();
+              widget.saveDataToHiveCallback(
+                  widget.playerScores, widget.playerNames);
               Navigator.pop(context);
             },
             child: const Text(

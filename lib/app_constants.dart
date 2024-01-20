@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:screw_app/models/player.dart';
 
 class AppColor {
   static const kPrimaryColor = Color(0xFF24183e);
@@ -10,4 +12,5 @@ class AppColor {
   static const kLoserPlayerColor = Colors.green;
 }
 
-late final scoresBox;
+Box<Player> scoresBox = Hive.box<Player>('scoresBox');
+bool SocreBoxHasData = scoresBox.isNotEmpty;

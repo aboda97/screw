@@ -5,16 +5,59 @@ import 'package:screw_app/app_constants.dart';
 import 'package:screw_app/first_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:screw_app/models/player.dart';
+import 'package:screw_app/second_screen.dart';
 
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(PlayerAdapter());
-  scoresBox = await Hive.openBox<Player>('scoresBox');
-  runApp(const MyApp());
+  await Hive.openBox<Player>('scoresBox');
+
+  List<List<int>> initialPlayerScores = [];
+  List<String> initialPlayerNames = [];
+
+  var scoresBox = Hive.box<Player>('scoresBox');
+  Set<String> uniqueNames = Set<String>();
+
+  for (var i = 0; i < scoresBox.length; i++) {
+    var player = scoresBox.getAt(i);
+    if (uniqueNames.add(player!.name)) {
+      // Add the name to the set only if it's not already present
+      initialPlayerScores.add([player.score]);
+      initialPlayerNames.add(player.name);
+    }
+  }
+
+  runApp(MyApp(
+    initialPlayerScores: initialPlayerScores,
+    initialPlayerNames: initialPlayerNames,
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  final List<List<int>> initialPlayerScores;
+  final List<String> initialPlayerNames;
+  const MyApp({
+    required this.initialPlayerScores,
+    required this.initialPlayerNames,
+    super.key,
+  });
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  List<List<int>> playerScores = [];
+  int numberOfPlayers = 2;
+  List<String> playerNames = [];
+
+  @override
+  void initState() {
+    super.initState();
+    playerScores = widget.initialPlayerScores;
+    playerNames = widget.initialPlayerNames;
+    numberOfPlayers = widget.initialPlayerNames.length;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +85,12 @@ class MyApp extends StatelessWidget {
             ),
           )),
       title: 'Screw',
-      home: const HomePage(),
+      home: SocreBoxHasData
+          ? ScoreBoard(
+              numberOfPlayers: numberOfPlayers,
+              playerNames: playerNames,
+            )
+          : const HomePage(),
     );
   }
 }
