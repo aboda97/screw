@@ -89,6 +89,7 @@ class _MyAppState extends State<MyApp> {
           ? ScoreBoard(
               numberOfPlayers: numberOfPlayers,
               playerNames: playerNames,
+              playerScores: playerScores,
             )
           : const HomePage(),
     );

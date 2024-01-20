@@ -184,6 +184,7 @@ class _HomePageState extends State<HomePage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ScoreBoard(
+                              playerScores: const [],
                               numberOfPlayers: selectedPlayers,
                               playerNames: nameControllers
                                   .map((controller) => controller.text)

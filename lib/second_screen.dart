@@ -7,11 +7,13 @@ import 'package:screw_app/models/player.dart';
 class ScoreBoard extends StatefulWidget {
   final int numberOfPlayers;
   final List<String> playerNames;
+  final List<List<int>> playerScores;
 
   const ScoreBoard({
     Key? key,
     required this.numberOfPlayers,
     required this.playerNames,
+    required this.playerScores,
   }) : super(key: key);
 
   @override
