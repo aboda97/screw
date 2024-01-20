@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:screw_app/add_score_to_bottom_sheet.dart';
 import 'package:screw_app/app_constants.dart';
-import 'package:screw_app/dash_board_screen.dart';
 import 'package:screw_app/first_screen.dart';
 import 'package:screw_app/models/player.dart';
 
@@ -31,69 +30,6 @@ class _ScoreBoardState extends State<ScoreBoard> {
         scoresBox.add(player);
       }
     }
-  }
-
-//--------Show Dialog and move to dashboard screen
-  Future<void> showSaveConfirmationDialog() async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppColor.kAppBarColor,
-          title: const Center(
-            child: Text(
-              'تأكيد الحفظ',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0,
-              ),
-            ),
-          ),
-          content: const Text('هل أنت متأكد من حفظ البيانات؟'),
-          actions: <Widget>[
-            ButtonBar(
-              alignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: AppColor.kBackgroundTableHead,
-                      borderRadius: BorderRadius.circular(
-                        12,
-                      )),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(); // Close the dialog
-                    },
-                    child: const Text('لا'),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: AppColor.kLoserPlayerColor,
-                      borderRadius: BorderRadius.circular(
-                        12,
-                      )),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => DashBoardScreen(
-                            playerScores: playerScores,
-                            playerNames: widget.playerNames,
-                          ),
-                        ),
-                      );
-                      saveDataToHive(playerScores, widget.playerNames);
-                    },
-                    child: const Text('نعم'),
-                  ),
-                ),
-              ],
-            )
-          ],
-        );
-      },
-    );
   }
 
   void addScore(List<int> scores) {
@@ -152,12 +88,6 @@ class _ScoreBoardState extends State<ScoreBoard> {
       },
     );
   }
-
-  // void handleResetScores() {
-  //   setState(() {
-  //     playerScores.clear();
-  //   });
-  // }
 
 //------------- Basic Func
   // Widget buildDataTable() {
@@ -374,16 +304,6 @@ class _ScoreBoardState extends State<ScoreBoard> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              showSaveConfirmationDialog();
-            },
-            icon: const Icon(
-              Icons.save_alt_outlined,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-          IconButton(
             onPressed: handleAddScore,
             icon: const Icon(
               Icons.add,
@@ -392,10 +312,7 @@ class _ScoreBoardState extends State<ScoreBoard> {
             ),
           ),
           IconButton(
-            onPressed: () {
-              scoresBox.clear();
-              clearDataTable();
-            },
+            onPressed: clearScores,
             icon: const Icon(
               Icons.refresh,
               color: Colors.white,
@@ -430,6 +347,35 @@ class _ScoreBoardState extends State<ScoreBoard> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: buildDataTable(),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          AppColor.kLoserPlayerColor),
+                    ),
+                    onPressed: () {
+                      scoresBox.clear();
+                      clearDataTable();
+
+                      ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'حذف جميع الجوالات والجدول',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
